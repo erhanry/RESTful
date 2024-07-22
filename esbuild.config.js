@@ -5,7 +5,6 @@ await esbuild.build({
     sourcemap: false, // external inline both
     bundle: true,
     platform: "node",
-    target: ["node10.4"],
     outdir: "dist",
     outExtension: { ".js": ".cjs" },
     legalComments: "none",
