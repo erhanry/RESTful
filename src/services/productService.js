@@ -9,15 +9,17 @@ const create = async (newData) => {
     return createdProduct;
 };
 
-const getOne = (id) => productModel.findById(id);
+const getOne = (id) => productModel.findById(id).select({ owner: 0, bought: 0 });
 
-const getLast = (limit) => productModel.find().sort({ createdAt: -1 }).limit(limit);
+const getLast = (limit) => productModel.find().select({ owner: 0, bought: 0 }).sort({ createdAt: -1 }).limit(limit);
 
-const getOneDetailed = (id) => productModel.findById(id).populate("owner", { password: 0 }).populate("category");
+const getOneDetailed = (id) =>
+    productModel.findById(id).populate("owner", { password: 0, boughtProduct: 0 }).populate("category", { owner: 0 });
 
-const getAll = () => productModel.find();
+const getAll = () => productModel.find().select({ owner: 0, bought: 0 });
 
-const getCategory = (categoryId) => productModel.find({ category: categoryId }).sort({ createdAt: -1 });
+const getCategory = (categoryId) =>
+    productModel.find({ category: categoryId }).select({ owner: 0 }).sort({ createdAt: -1 });
 
 const update = (id, newData, ownerId) =>
     productModel.findByIdAndUpdate(id, newData, { new: true, runValidators: true }).where("owner").equals(ownerId);
@@ -39,10 +41,15 @@ const del = async (productId, ownerId) => {
 const bought = async (productId, userId) => {
     const boughtProduct = await productModel
         .findByIdAndUpdate(productId, { $push: { bought: userId } }, { new: true, runValidators: true })
+        .select({ owner: 0, bought: 0 })
         .where("bought")
         .ne(userId)
         .where("owner")
         .ne(userId);
+
+    if (!boughtProduct?._id) {
+        throw new Error("Product not found");
+    }
 
     await userModel.findByIdAndUpdate(userId, { $push: { boughtProduct: boughtProduct._id } });
 
@@ -54,11 +61,12 @@ const countProduct = () => productModel.countDocuments();
 const pagination = (limit, page) =>
     productModel
         .find()
+        .select({ owner: 0, bought: 0 })
         .limit(limit)
         .skip(limit * (page - 1));
 
 const search = ({ title, vendor, category, description }) => {
-    const searchProduct = productModel.find();
+    const searchProduct = productModel.find().select({ owner: 0, bought: 0 });
     const regex = (x) => new RegExp(x, "i");
 
     if (title) {

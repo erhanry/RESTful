@@ -61,7 +61,7 @@ async function createSession(user) {
 }
 
 const getProfile = (id) =>
-    userModel.findById(id).select("-password").populate("createdProduct").populate("boughtProduct");
+    userModel.findById(id).select({ password: 0 }).populate("createdProduct").populate("boughtProduct");
 
 const getMe = (id) => userModel.findById(id).select({ _id: 1, firstName: 1, lastName: 1, email: 1 });
 
