@@ -44,7 +44,7 @@ start();
 
 // mongoose message
 mongoose.connection
-    .on("connected", () => console.log("Successfully connected to the database!"))
+    .on("connected", () => console.log(`Successfully connected to "${MONGO_DATABASE}" database!`))
     .on("disconnected", () => console.log("DB is disconnected!"))
     .on("error", (err) => {
         throw err;
