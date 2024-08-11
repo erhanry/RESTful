@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const IMAGE_PATTERN = /^https?:\/\/.*\/.*\.(png|jpeg|jpg)$/i;
+const IMAGE_PATTERN = /\.(jpg|jpeg|png|gif|avif|JPG|JPEG|PNG|GIF|AVIF)$/i;
 
 const productSchema = new Schema(
     {

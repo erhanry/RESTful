@@ -1,6 +1,6 @@
 import userService from "../services/userService.js";
 
-const AUTH_COOKIE_NAME = "auth-cookie";
+const AUTH_COOKIE_NAME = "auth";
 
 export const authMiddleware = () => async (req, res, next) => {
     const accessToken = req.cookies[AUTH_COOKIE_NAME];

@@ -6,7 +6,7 @@ import errorMapper from "../util/errorMapper.js";
 
 const userController = Router();
 
-const AUTH_COOKIE_NAME = "auth-cookie";
+const AUTH_COOKIE_NAME = "auth";
 
 userController.post("/register", async (req, res) => {
     const userData = req.body;
